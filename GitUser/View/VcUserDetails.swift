@@ -8,24 +8,54 @@
 import UIKit
 
 class VcUserDetails: UIViewController {
-
-    var user: ModelUser?
+    
+    @IBOutlet weak var imageProfile: UIImageView?
+    @IBOutlet weak var lblFollowers: UILabel?
+    @IBOutlet weak var lblFollowing: UILabel?
+    @IBOutlet weak var lblName: UILabel?
+    @IBOutlet weak var lblCompany: UILabel?
+    @IBOutlet weak var lblBlog: UILabel?
+    @IBOutlet weak var txtNote: UITextView?
+    
+    var login: String = ""
+    var viewModel: ViewModelUserDetails?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        viewModel = ViewModelUserDetails()
+        viewModel?.delegate = self
+        viewModel?.loadData(login: login)
+        
+        self.txtNote?.layer.borderWidth = 1.0
+        self.txtNote?.layer.borderColor = UIColor.gray.cgColor
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    @IBAction func clickedSave(_ sender: UIButton) {
+        txtNote?.resignFirstResponder()
+        viewModel?.saveNote(txtNote?.text ?? "")
     }
-    */
+}
 
+extension VcUserDetails: ViewModelUserDetailsDelegate{
+    func responseSuccessRetrieve(user: User) {
+        DispatchQueue.main.async { [self] in
+            imageProfile?.loadImage(urlString: user.avatar_url ?? "")
+            lblFollowers?.text = "\(user.detail?.followers ?? 0)"
+            lblFollowing?.text = "\(user.detail?.following ?? 0)"
+            lblName?.text = user.detail?.name
+            lblCompany?.text = user.detail?.company
+            lblBlog?.text = user.detail?.blog
+            
+            txtNote?.text = user.note?.note
+        }
+    }
+    
+    func responseFailedRetrieve() {
+        
+    }
+    
+    func responseSaveNoteSuccess(){
+        
+    }
 }

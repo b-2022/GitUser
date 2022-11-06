@@ -18,7 +18,8 @@
 		7E153A7F29102A4B00335435 /* GitUserUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E153A7E29102A4B00335435 /* GitUserUITestsLaunchTests.swift */; };
 		7EA39C3129136A8A00C38837 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA39C3029136A8A00C38837 /* CoreDataManager.swift */; };
 		7EB45EC32915F5DE005B71C4 /* ViewModelUserDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB45EC22915F5DE005B71C4 /* ViewModelUserDetails.swift */; };
-		7EB45EC529160212005B71C4 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB45EC429160212005B71C4 /* TableViewDataSource.swift */; };
+		7EB45EC529160212005B71C4 /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB45EC429160212005B71C4 /* TableViewCell.swift */; };
+		7EB45ED6291802B2005B71C4 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7EB45ED5291802B2005B71C4 /* IQKeyboardManagerSwift */; };
 		7ED2C9B62910369E00333357 /* ModelUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED2C9B52910369E00333357 /* ModelUser.swift */; };
 		7ED2C9B8291038AD00333357 /* ViewModelUserList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED2C9B7291038AD00333357 /* ViewModelUserList.swift */; };
 		7ED2C9BB291038DB00333357 /* ApiHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED2C9BA291038DB00333357 /* ApiHelper.swift */; };
@@ -61,7 +62,7 @@
 		7E153A7E29102A4B00335435 /* GitUserUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitUserUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		7EA39C3029136A8A00C38837 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		7EB45EC22915F5DE005B71C4 /* ViewModelUserDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelUserDetails.swift; sourceTree = "<group>"; };
-		7EB45EC429160212005B71C4 /* TableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
+		7EB45EC429160212005B71C4 /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		7ED2C9B52910369E00333357 /* ModelUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelUser.swift; sourceTree = "<group>"; };
 		7ED2C9B7291038AD00333357 /* ViewModelUserList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelUserList.swift; sourceTree = "<group>"; };
 		7ED2C9BA291038DB00333357 /* ApiHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiHelper.swift; sourceTree = "<group>"; };
@@ -76,6 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7EB45ED6291802B2005B71C4 /* IQKeyboardManagerSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -175,7 +177,7 @@
 				7ED44E702910C42A003BB89E /* Extension.swift */,
 				7ED2C9BA291038DB00333357 /* ApiHelper.swift */,
 				7ED44E7929111A67003BB89E /* Network.swift */,
-				7EB45EC429160212005B71C4 /* TableViewDataSource.swift */,
+				7EB45EC429160212005B71C4 /* TableViewCell.swift */,
 			);
 			path = Framework;
 			sourceTree = "<group>";
@@ -205,6 +207,9 @@
 			dependencies = (
 			);
 			name = GitUser;
+			packageProductDependencies = (
+				7EB45ED5291802B2005B71C4 /* IQKeyboardManagerSwift */,
+			);
 			productName = GitUser;
 			productReference = 7E153A5529102A4500335435 /* GitUser.app */;
 			productType = "com.apple.product-type.application";
@@ -277,6 +282,9 @@
 				Base,
 			);
 			mainGroup = 7E153A4C29102A4500335435;
+			packageReferences = (
+				7EB45ED4291802B2005B71C4 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+			);
 			productRefGroup = 7E153A5629102A4500335435 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -330,7 +338,7 @@
 				7ED44E782910F553003BB89E /* VcUserList.swift in Sources */,
 				7E153A5B29102A4500335435 /* SceneDelegate.swift in Sources */,
 				7E153A6329102A4600335435 /* GitUser.xcdatamodeld in Sources */,
-				7EB45EC529160212005B71C4 /* TableViewDataSource.swift in Sources */,
+				7EB45EC529160212005B71C4 /* TableViewCell.swift in Sources */,
 				7ED2C9BB291038DB00333357 /* ApiHelper.swift in Sources */,
 				7ED44E712910C42A003BB89E /* Extension.swift in Sources */,
 			);
@@ -516,6 +524,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -544,6 +553,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -670,6 +680,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7EB45ED4291802B2005B71C4 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7EB45ED5291802B2005B71C4 /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7EB45ED4291802B2005B71C4 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		7E153A6129102A4600335435 /* GitUser.xcdatamodeld */ = {

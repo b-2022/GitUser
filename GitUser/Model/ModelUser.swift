@@ -41,4 +41,6 @@ struct ModelUser: Codable{
     let following: Int?
     let created_at: String?
     let updated_at: String?
+    
+    var note: String?
 }

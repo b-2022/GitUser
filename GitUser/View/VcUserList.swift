@@ -19,8 +19,13 @@ class VcUserList: UIViewController, ViewModelUserListDelegate {
         viewModel.loadData()
     }
     
-    func loadedAPI() {
+    // MARK: - ViewModelUserListDelegate
+    func dataLoaded() {
         self.tableView?.reloadData()
+    }
+    
+    func updateTable(){
+        
     }
 
     // MARK: - Navigation
@@ -29,27 +34,26 @@ class VcUserList: UIViewController, ViewModelUserListDelegate {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "segueToDetails" {
             let vc = segue.destination as? VcUserDetails
+            vc?.login = sender as? String ?? ""
+        }
+        else if segue.identifier == "segueToDetailsSwiftUI"{
+            let vc = segue.destination as? VcUserDetails
+            vc?.login = sender as? String ?? ""
         }
     }
 }
 
 extension VcUserList: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.userList.count
+        return viewModel.userList?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         var cell = tableView.dequeueReusableCell(withIdentifier: TableCellType.normal.cellIdentifier)
 
-        if indexPath.row % 3 == 0 {
+        if indexPath.row != 0 && indexPath.row % 3 == 0 {
             cell = tableView.dequeueReusableCell(withIdentifier: TableCellType.inverted.cellIdentifier)
-        }
-
-        print("Cell : \(cell)")
-        if let _cell = cell as? CellConfig {
-            print("Cell 2 : \(_cell)")
-            _cell.configCellData(user: viewModel.userList[indexPath.row])
         }
         
         return cell ?? UITableViewCell()
@@ -60,8 +64,31 @@ extension VcUserList: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.performSegue(withIdentifier: "segueToDetails", sender: nil)
+        performSegue(withIdentifier: "segueToDetails", sender: viewModel.userList?[indexPath.row].login)
+//        performSegue(withIdentifier: "segueToDetailsSwiftUI", sender: viewModel.userList[indexPath.row].login)
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        //Configure cell data when going to display, to reduce memory usage
+        if let _cell = cell as? CellNormalConfig {
+            _cell.configCellData(user: viewModel.userList?[indexPath.row])
+        }
+        
+        if indexPath.row >= (viewModel.userList?.count ?? 0)-1{
+            viewModel.loadData()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        //Dealloc cell data when out of screen, to reduce memory usage
+        if let _cell = cell as? CellNormalConfig {
+            _cell.deallocCellData()
+        }
     }
 }
 
-
+extension VcUserList: UISearchBarDelegate{
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        viewModel.searchText(text: searchText)
+    }
+}
