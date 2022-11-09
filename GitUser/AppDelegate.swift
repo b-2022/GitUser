@@ -18,6 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first)
         
         IQKeyboardManager.shared.enable = true
+        Network.shared.startMonitor()
+        
         return true
     }
 

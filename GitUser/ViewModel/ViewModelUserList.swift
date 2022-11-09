@@ -31,6 +31,19 @@ class ViewModelUserList: NSObject {
         userList = [User]()
     }
     
+    func cell(indexPath: IndexPath) -> String {
+        if indexPath.row != 0 && (indexPath.row+1) % 4 == 0 {
+            return TableCellType.inverted.cellIdentifier
+        }
+        
+        if userList?[indexPath.row].note != nil {
+            return TableCellType.noted.cellIdentifier
+        }
+        
+        return TableCellType.normal.cellIdentifier
+        
+    }
+    
     func loadData(){
         let length = Int.random(in: 10..<20)
         if let array = CoreDataManager.shared.getUserList(offset: offset, length: length){
@@ -47,7 +60,9 @@ class ViewModelUserList: NSObject {
     func searchText(text: String){
         if text.count == 0 {
             offset = 0
+
             loadData()
+            return
         }
         
         userList = CoreDataManager.shared.searchUser(text: text)
@@ -60,7 +75,6 @@ class ViewModelUserList: NSObject {
                     self?.lastId = array[array.count-1].id ?? 0
                     
                     CoreDataManager.shared.saveUserList(array: array) { result in
-                        print("Success Save")
                         self?.loadData()
                     }
                 }

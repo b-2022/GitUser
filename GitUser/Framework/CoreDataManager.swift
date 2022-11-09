@@ -38,29 +38,31 @@ class CoreDataManager: NSObject {
         // Create batch insert request
         let batchInsertRequest = NSBatchInsertRequest(entity: User.entity(), managedObjectHandler: { (managedObject) -> Bool in
             
-            //Get ModelUser from array based on index
-            let user = array[index]
-            
-            //User Mirror reflect to properties of User, then set managedObject value
-            let _ = Mirror(reflecting: user).children.map { child in
-                guard let key = child.label else { return }
+            if index < array.count {
+                //Get ModelUser from array based on index
+                let user = array[index]
                 
-                //Convert child.value to AnyObject as it always return Optional(value)
-                let value = child.value as AnyObject
-                
-                //Check the type if NOT NSNull then proceed, because the value is not able to save in core data
-                if type(of: value) != NSNull.self {
-                    managedObject.setValue(value, forKey: key)
+                //User Mirror reflect to properties of User, then set managedObject value
+                let _ = Mirror(reflecting: user).children.map { child in
+                    guard let key = child.label else { return }
+                    
+                    //Convert child.value to AnyObject as it always return Optional(value)
+                    let value = child.value as AnyObject
+                    
+                    //Check the type if NOT NSNull then proceed, because the value is not able to save in core data
+                    if type(of: value) != NSNull.self {
+                        managedObject.setValue(value, forKey: key)
+                    }
                 }
             }
             
-            index += 1
             
+            index += 1
+
             //Return true if index more or equal to array count, or else it will be infite loop
-            return index>=array.count ? true : false
+            return index>array.count ? true : false
         })
-        
-        
+
         //Execute core data BatchInsertRequest
         do{
             try contextSave.execute(batchInsertRequest)
@@ -91,7 +93,7 @@ class CoreDataManager: NSObject {
                     
                     //Check the type if NOT NSNull then proceed, because the value is not able to save in core data
                     if type(of: value) != NSNull.self {
-                        print((coreDataUser.detail?.entity.attributesByName.keys.contains(key) ?? false))
+                        //Check if contain User managedObject contains key, then proceed to save data
                         if (coreDataUser.detail?.entity.attributesByName.keys.contains(key) ?? false){
                             coreDataUser.detail?.setValue(value, forKey: key)
                         }
@@ -160,9 +162,9 @@ class CoreDataManager: NSObject {
         return nil
     }
     
-    func searchUser(text: String) -> [User]? {
+    func searchUser(text: String) -> [User] {
         let fetchUser: NSFetchRequest<User> = User.fetchRequest()
-        fetchUser.predicate = NSPredicate(format: "login LIKE %@", text)
+        fetchUser.predicate = NSPredicate(format: "login CONTAINS[c] %@", text.lowercased())
 
         let result = try? contextRead.fetch(fetchUser)
         
@@ -172,7 +174,7 @@ class CoreDataManager: NSObject {
             }
         }
         
-        return nil
+        return [User]()
     }
     
 }

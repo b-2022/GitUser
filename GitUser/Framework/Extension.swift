@@ -24,10 +24,7 @@ extension UIImageView {
             guard let urlPath = URL(string: urlString)?.lastPathComponent else{
                 return completion(nil)
             }
-            
-            //Get document directory
-//            let dir = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
-            
+        
             //Diretory append with file path, return completion nil if invalid file path
             guard let cacheFileURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
                                             .first?.appendingPathComponent(urlPath) else{
@@ -50,44 +47,6 @@ extension UIImageView {
                     completion(nil)
                 }
             }
-            
-            
-            //Check if file exist, if exist then return the image
-//            if FileManager.default.fileExists(atPath: fullURL.path) {
-//                let image = UIImage(contentsOfFile: fullURL.path)
-//                completion(image)
-//            }
-//            else{
-//                //Download Image from url
-//                do{
-//                    URLSession.shared.dataTask(with: url) { data, response, error in
-//                        if error == nil {
-//                            if let data = data {
-//                                //Save image data to file
-//                                try data.write(to: fullURL)
-//
-//                                //Response to completion in main thread
-//                                let image = UIImage(data: data)
-//                                completion(image)
-//                            }
-//                        }
-//                    }
-//
-//                    guard let data = try? Data(contentsOf: url) else{
-//                        return completion(nil)
-//                    }
-//
-//                    //Save image data to file
-//                    try data.write(to: fullURL)
-//
-//                    //Response to completion in main thread
-//                    let image = UIImage(data: data)
-//                    completion(image)
-//                }catch{
-//                    print("Error Download Image")
-//                    completion(nil)
-//                }
-//            }
         }
     }
     

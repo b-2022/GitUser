@@ -27,7 +27,7 @@ protocol CellNormalConfig {
     var lblName: UILabel? { get set }
     var lblDetails: UILabel? { get set }
     
-    func configCellData(user: User?)
+    func configCellData(user: User)
     func deallocCellData()
 }
 
@@ -42,23 +42,28 @@ class TableViewCellNormal: UITableViewCell, CellNormalConfig{
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        //Set Image Profile round and default image 'user'
         self.imageProfile?.layer.cornerRadius = (self.imageProfile?.bounds.width ?? 0)/2
         self.imageProfile?.image = UIImage(named: "user")
     }
     
-    func configCellData(user: User?) {
-        if let user = user{
-            if let imageURL = user.avatar_url {
-                self.imageProfile?.loadImage(urlString: imageURL, completion: { [weak self] img in
-                    guard let self = self else { return }
-                    DispatchQueue.main.async {
-                        self.imageProfile?.image = img
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.imageProfile?.image = UIImage(named: "user")
+    }
+    
+    func configCellData(user: User) {
+        loadData(user: user)
+        
+        //Check if imageURL NOT nill and not empty string, then proceed to download image from server
+        if let imageURL = user.avatar_url, !(user.avatar_url?.isEmpty ?? false) {
+            self.imageProfile?.loadImage(urlString: imageURL, completion: { [weak self] img in
+                DispatchQueue.main.async {
+                    if let _image = img {
+                        self?.imageProfile?.image = _image
                     }
-                })
-            }
-            
-            lblName?.text = user.login
-            lblDetails?.text = user.type
+                }
+            })
         }
     }
     
@@ -66,6 +71,11 @@ class TableViewCellNormal: UITableViewCell, CellNormalConfig{
         imageProfile?.image = nil
         lblName?.text = nil
         lblDetails?.text = nil
+    }
+    
+    fileprivate func loadData(user: User){
+        lblName?.text = user.login
+        lblDetails?.text = user.type
     }
 }
 
@@ -75,22 +85,31 @@ class TableViewCellNote: TableViewCellNormal, CellNoteConfig{
     override func awakeFromNib() {
         super.awakeFromNib()
     }
+    
+    override func configCellData(user: User) {
+        super.configCellData(user: user)
+    }
 }
 
 class TableViewCellInverted: TableViewCellNormal{
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
     
-    override func configCellData(user: User?) {
-        super.configCellData(user: user)
+    override func configCellData(user: User) {
+        super.loadData(user: user)
         
-        if let user = user {
-            //Check if image profile not default image, then invert image
-            if !(imageProfile?.image?.isEqual(UIImage(named: "user")) ?? false) {
-                let newImage = imageProfile?.image?.invertColor()
-                imageProfile?.image = newImage
-            }
+        //Check if imageURL NOT nill and not empty string, then proceed to download image from server
+        if let imageURL = user.avatar_url, !(user.avatar_url?.isEmpty ?? false) {
+            self.imageProfile?.loadImage(urlString: imageURL, completion: { [weak self] image in
+                DispatchQueue.main.async {
+                    //If response image not nil, invert color of image and set image profile with latest
+                    if let _image = image {
+                        self?.imageProfile?.image = _image.invertColor()
+                    }
+                }
+            })
         }
     }
 }
