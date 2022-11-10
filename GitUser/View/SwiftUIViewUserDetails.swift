@@ -16,6 +16,7 @@ class SwiftUIViewHostingController: UIHostingController<SwiftUIViewUserDetails> 
 struct SwiftUIViewUserDetails: View {
     
     @State private var textNote: String = ""
+    @ObservedObject var dataModal: ViewModelUserDetails = ViewModelUserDetails()
     
     var body: some View {
         VStack {

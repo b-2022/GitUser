@@ -23,44 +23,56 @@ typealias CompletionBlock<T: Codable> = (_ result: Bool, _ data: T?, _ status: E
 
 class ApiHelper: NSObject {
     
+    static let shared = ApiHelper()
+    let backgroundQueue = DispatchQueue(label: "com.apps.network", qos: .background)
+    let semaphore = DispatchSemaphore(value: 1)
+    
     fileprivate func startRequest<T: Codable>(request: URLRequest, completion: @escaping CompletionBlock<T>){
-        //Consume API request
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            //Check if response status code not 200, then response failed
-            if let urlResponse = response as? HTTPURLResponse {
-                if urlResponse.statusCode != 200 {
+        
+        backgroundQueue.async {
+            self.semaphore.wait()
+            
+            //Consume API request
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                //Check if response status code not 200, then response failed
+                if let urlResponse = response as? HTTPURLResponse {
+                    if urlResponse.statusCode != 200 {
+                        completion(false, nil, nil)
+                        return
+                    }
+                }
+                //Check if error not nil, then response failed
+                if error != nil {
                     completion(false, nil, nil)
                     return
                 }
-            }
-            //Check if error not nil, then response failed
-            if error != nil {
-                completion(false, nil, nil)
-                return
+                
+                //Check if data is empty, then response failed
+                guard let _data = data else {
+                    completion(false, nil, nil)
+                    return
+                }
+
+                //Decode data to model, response failed if not success
+                let decoder = JSONDecoder()
+                do {
+                    let model = try decoder.decode(T.self, from: _data)
+                    completion(true, model, nil)
+                }
+                catch {
+                    assertionFailure(error.localizedDescription)
+                    completion(false, nil, nil)
+                }
+                
+                //Signal semaphore to continue next task
+                self.semaphore.signal()
             }
             
-            //Check if data is empty, then response failed
-            guard let _data = data else {
-                completion(false, nil, nil)
-                return
-            }
-
-            //Decode data to model, response failed if not success
-            let decoder = JSONDecoder()
-            do {
-                let model = try decoder.decode(T.self, from: _data)
-                completion(true, model, nil)
-            }
-            catch {
-                assertionFailure(error.localizedDescription)
-                completion(false, nil, nil)
-            }
+            task.resume()
         }
-        
-        task.resume()
     }
     
-    static func getUserList(since: Int = 0, completion: @escaping CompletionBlock<[ModelUser]>){
+    func getUserList(since: Int = 0, completion: @escaping CompletionBlock<[ModelUser]>){
 
         //Create URL with query paramerter
         var urlComponent = URLComponents(string: "https://api.github.com/users")
@@ -74,10 +86,10 @@ class ApiHelper: NSObject {
         //Create URL Request to be used in URLSession
         let request = URLRequest(url: url)
         
-        ApiHelper().startRequest(request: request, completion: completion)
+        startRequest(request: request, completion: completion)
     }
     
-    static func getUserDetails(user: String, completion: @escaping CompletionBlock<ModelUser>){
+    func getUserDetails(user: String, completion: @escaping CompletionBlock<ModelUser>){
         //Create URL with query paramerter
         var urlComponent = URLComponents(string: "https://api.github.com/users/")
         urlComponent?.path += user
@@ -90,7 +102,7 @@ class ApiHelper: NSObject {
         //Create URL Request to be used in URLSession
         let request = URLRequest(url: url)
         
-        ApiHelper().startRequest(request: request, completion: completion)
+        startRequest(request: request, completion: completion)
     }
     
 }

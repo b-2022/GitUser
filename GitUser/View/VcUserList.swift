@@ -49,7 +49,7 @@ class VcUserList: UIViewController, ViewModelUserListDelegate, NetworkDelegate {
             offlineHeightConstraint?.constant = 0
         }
         else{
-            offlineHeightConstraint?.constant = 50
+            offlineHeightConstraint?.constant = 25
         }
     }
 

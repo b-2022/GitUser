@@ -32,13 +32,17 @@ class Network: NSObject {
         monitor?.pathUpdateHandler = { path in
             if path.status == .satisfied {
                 print("Got COnnection")
-                self.completion?(true)
-                self.delegate?.network(connection: true)
+                DispatchQueue.main.async {
+                    self.completion?(true)
+                    self.delegate?.network(connection: true)
+                }
             }
             else if (path.status == .unsatisfied){
                 print("No Connection")
-                self.completion?(false)
-                self.delegate?.network(connection: false)
+                DispatchQueue.main.async {
+                    self.completion?(false)
+                    self.delegate?.network(connection: false)
+                }
             }
         }
     }

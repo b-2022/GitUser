@@ -13,12 +13,12 @@ protocol ViewModelUserDetailsDelegate: AnyObject {
     func responseSaveNoteSuccess()
 }
 
-class ViewModelUserDetails: NSObject {
+class ViewModelUserDetails: NSObject, ObservableObject {
     private var login: String = ""
     
     weak var delegate: ViewModelUserDetailsDelegate?
     
-    var user: User?
+    @Published var user: User?
 
     func loadData(login: String){
         self.login = login
@@ -50,7 +50,7 @@ class ViewModelUserDetails: NSObject {
     }
     
     private func loadAPI(){
-        ApiHelper.getUserDetails(user: login) { [weak self] result, data, status in
+        ApiHelper.shared.getUserDetails(user: login) { [weak self] result, data, status in
             if result {
                 if let data = data {
                     //Get user info from api and save to database

@@ -69,7 +69,7 @@ class ViewModelUserList: NSObject {
     }
     
     private func callApi(since: Int){
-        ApiHelper.getUserList(since: since) { [weak self] result, data, status in
+        ApiHelper.shared.getUserList(since: since) { [weak self] result, data, status in
             if result {
                 if let array = data {
                     self?.lastId = array[array.count-1].id ?? 0
