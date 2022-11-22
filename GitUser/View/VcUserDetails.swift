@@ -17,6 +17,8 @@ class VcUserDetails: UIViewController {
     @IBOutlet weak var lblBlog: UILabel?
     @IBOutlet weak var txtNote: UITextView?
     
+    @IBOutlet weak var offlineHeightConstraint: NSLayoutConstraint?
+    
     var login: String = ""
     var viewModel: ViewModelUserDetails?
     
@@ -29,6 +31,15 @@ class VcUserDetails: UIViewController {
         
         self.txtNote?.layer.borderWidth = 1.0
         self.txtNote?.layer.borderColor = UIColor.gray.cgColor
+        
+        Network.shared.startMonitor { connection in
+            if connection {
+                self.offlineHeightConstraint?.constant = 0
+            }
+            else{
+                self.offlineHeightConstraint?.constant = 25
+            }
+        }
     }
     
     @IBAction func clickedSave(_ sender: UIButton) {
@@ -39,16 +50,14 @@ class VcUserDetails: UIViewController {
 
 extension VcUserDetails: ViewModelUserDetailsDelegate{
     func responseSuccessRetrieve(user: User) {
-        DispatchQueue.main.async { [self] in
-            imageProfile?.loadImage(urlString: user.avatar_url ?? "")
-            lblFollowers?.text = "\(user.detail?.followers ?? 0)"
-            lblFollowing?.text = "\(user.detail?.following ?? 0)"
-            lblName?.text = user.detail?.name
-            lblCompany?.text = user.detail?.company
-            lblBlog?.text = user.detail?.blog
-            
-            txtNote?.text = user.note?.note
-        }
+        imageProfile?.loadImage(urlString: user.avatar_url ?? "")
+        lblFollowers?.text = "\(user.detail?.followers ?? 0)"
+        lblFollowing?.text = "\(user.detail?.following ?? 0)"
+        lblName?.text = user.detail?.name
+        lblCompany?.text = user.detail?.company
+        lblBlog?.text = user.detail?.blog
+        
+        txtNote?.text = user.note?.note
     }
     
     func responseFailedRetrieve() {

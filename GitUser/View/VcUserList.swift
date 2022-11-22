@@ -20,9 +20,7 @@ class VcUserList: UIViewController, ViewModelUserListDelegate, NetworkDelegate {
         viewModel.delegate = self
         
         Network.shared.delegate = self
-        Network.shared.startMonitor { connection in
-            print("Result :\(connection)")
-        }
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -62,7 +60,7 @@ class VcUserList: UIViewController, ViewModelUserListDelegate, NetworkDelegate {
             vc?.login = sender as? String ?? ""
         }
         else if segue.identifier == "segueToDetailsSwiftUI"{
-            let vc = segue.destination as? VcUserDetails
+            let vc = segue.destination as? SwiftUIViewHostingController
             vc?.login = sender as? String ?? ""
         }
     }

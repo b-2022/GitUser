@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 protocol ViewModelUserDetailsDelegate: AnyObject {
     func responseSuccessRetrieve(user: User)
@@ -19,8 +20,10 @@ class ViewModelUserDetails: NSObject, ObservableObject {
     weak var delegate: ViewModelUserDetailsDelegate?
     
     @Published var user: User?
+    @Published var newUser: ModelUser?
 
     func loadData(login: String){
+        print("ViewModelUserDetails loadData : \(login)")
         self.login = login
         loadData()
     }
@@ -28,7 +31,9 @@ class ViewModelUserDetails: NSObject, ObservableObject {
     func saveNote(_ string: String){
         if let user = user {
             if CoreDataManager.shared.updateUserNote(user: user, note: string) {
-                delegate?.responseSaveNoteSuccess()
+                DispatchQueue.main.async {
+                    self.delegate?.responseSaveNoteSuccess()
+                }
             }
         }
     }
@@ -39,8 +44,11 @@ class ViewModelUserDetails: NSObject, ObservableObject {
             //Check if user details is not empty
             if _user.detail != nil{
                 //Resposne user to view controller
-                user = _user
-                self.delegate?.responseSuccessRetrieve(user: _user)
+                DispatchQueue.main.async {
+                    self.user = _user
+                    self.delegate?.responseSuccessRetrieve(user: _user)
+                }
+                
                 return
             }
         }
@@ -51,28 +59,39 @@ class ViewModelUserDetails: NSObject, ObservableObject {
     
     private func loadAPI(){
         ApiHelper.shared.getUserDetails(user: login) { [weak self] result, data, status in
+            print("Get User Details : \(result)")
             if result {
                 if let data = data {
                     //Get user info from api and save to database
                     CoreDataManager.shared.updateUserDetails(user: data) { result, data in
                         if result {
                             guard let _user = data else {
-                                self?.delegate?.responseFailedRetrieve()
+                                DispatchQueue.main.async {
+                                    self?.delegate?.responseFailedRetrieve()
+                                }
+                                
                                 return
                             }
                             
-                            self?.user = _user
-                            //Response delegate with data
-                            self?.delegate?.responseSuccessRetrieve(user: _user)
+                            DispatchQueue.main.async {
+                                self?.user = _user
+                                //Response delegate with data
+                                self?.delegate?.responseSuccessRetrieve(user: _user)
+                            }
+                            
                             return
                         }
                         
-                        self?.delegate?.responseFailedRetrieve()
+                        DispatchQueue.main.async {
+                            self?.delegate?.responseFailedRetrieve()
+                        }
                     }
                 }
             }
             else{
-                self?.delegate?.responseFailedRetrieve()
+                DispatchQueue.main.async {
+                    self?.delegate?.responseFailedRetrieve()
+                }
             }
         }
     }

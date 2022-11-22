@@ -262,6 +262,25 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="esa-Lp-IFh" userLabel="ViewOffline">
+                                <rect key="frame" x="0.0" y="92" width="414" height="0.0"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Internet Connection. Offline Mode" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5h9-xw-fJD">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="0.0"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="1" green="0.889713168" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="5h9-xw-fJD" secondAttribute="trailing" id="BsO-OB-F7q"/>
+                                    <constraint firstItem="5h9-xw-fJD" firstAttribute="leading" secondItem="esa-Lp-IFh" secondAttribute="leading" id="MhM-pg-c5D"/>
+                                    <constraint firstItem="5h9-xw-fJD" firstAttribute="top" secondItem="esa-Lp-IFh" secondAttribute="top" id="n2d-iv-JJK"/>
+                                    <constraint firstAttribute="bottom" secondItem="5h9-xw-fJD" secondAttribute="bottom" id="pBc-tL-Cc1"/>
+                                    <constraint firstAttribute="height" id="rze-p5-irT"/>
+                                </constraints>
+                            </view>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7UV-7w-scd">
                                 <rect key="frame" x="0.0" y="92" width="414" height="250"/>
                                 <constraints>
@@ -420,10 +439,12 @@
                             <constraint firstItem="n1e-lN-n0q" firstAttribute="leading" secondItem="AlM-lP-nwR" secondAttribute="leading" constant="30" id="RQd-cJ-j8J"/>
                             <constraint firstItem="AlM-lP-nwR" firstAttribute="trailing" secondItem="URh-0r-aUN" secondAttribute="trailing" constant="15" id="S8q-OJ-enh"/>
                             <constraint firstItem="AlM-lP-nwR" firstAttribute="trailing" secondItem="Xki-KK-0mB" secondAttribute="trailing" constant="15" id="VHk-gm-AzY"/>
+                            <constraint firstAttribute="trailing" secondItem="esa-Lp-IFh" secondAttribute="trailing" id="VS7-Mk-QvC"/>
                             <constraint firstItem="1lw-H2-wfU" firstAttribute="top" secondItem="qhK-3w-Ng4" secondAttribute="bottom" constant="27" id="Vap-X9-DiP"/>
                             <constraint firstItem="NiT-Ex-zSX" firstAttribute="top" secondItem="7UV-7w-scd" secondAttribute="bottom" constant="16" id="Xax-Yh-dJU"/>
-                            <constraint firstItem="7UV-7w-scd" firstAttribute="top" secondItem="AlM-lP-nwR" secondAttribute="top" id="XhH-cP-bG1"/>
+                            <constraint firstItem="7UV-7w-scd" firstAttribute="top" secondItem="esa-Lp-IFh" secondAttribute="bottom" id="XhH-cP-bG1"/>
                             <constraint firstItem="bVz-4l-Gyz" firstAttribute="leading" secondItem="bE9-i3-Pem" secondAttribute="trailing" constant="8" symbolic="YES" id="ZCf-un-yhx"/>
+                            <constraint firstItem="esa-Lp-IFh" firstAttribute="top" secondItem="AlM-lP-nwR" secondAttribute="top" id="bDD-C1-rGB"/>
                             <constraint firstItem="AlM-lP-nwR" firstAttribute="trailing" secondItem="bVz-4l-Gyz" secondAttribute="trailing" constant="15" id="dHY-vo-43U"/>
                             <constraint firstItem="1lw-H2-wfU" firstAttribute="leading" secondItem="AlM-lP-nwR" secondAttribute="leading" constant="30" id="dmq-Vk-WzN"/>
                             <constraint firstItem="URh-0r-aUN" firstAttribute="leading" secondItem="NiT-Ex-zSX" secondAttribute="trailing" id="eoD-Q8-qAV"/>
@@ -433,6 +454,7 @@
                             <constraint firstItem="bE9-i3-Pem" firstAttribute="top" secondItem="n1e-lN-n0q" secondAttribute="bottom" constant="8" symbolic="YES" id="m3F-9J-wXd"/>
                             <constraint firstItem="qhK-3w-Ng4" firstAttribute="leading" secondItem="AlM-lP-nwR" secondAttribute="leading" constant="28" id="o1Z-6p-Zq8"/>
                             <constraint firstItem="XkG-zC-y1L" firstAttribute="top" secondItem="jNl-m5-vxm" secondAttribute="bottom" constant="10" id="onA-MY-Qht"/>
+                            <constraint firstItem="esa-Lp-IFh" firstAttribute="leading" secondItem="9fm-TK-LmE" secondAttribute="leading" id="rsg-Qd-wCa"/>
                             <constraint firstItem="qhK-3w-Ng4" firstAttribute="top" secondItem="7UV-7w-scd" secondAttribute="bottom" constant="16" id="ssf-mt-ln9"/>
                             <constraint firstItem="jNl-m5-vxm" firstAttribute="top" secondItem="bE9-i3-Pem" secondAttribute="bottom" constant="36" id="vez-gK-YjX"/>
                             <constraint firstItem="n1e-lN-n0q" firstAttribute="top" secondItem="1lw-H2-wfU" secondAttribute="bottom" constant="8" symbolic="YES" id="x99-E8-7FQ"/>
@@ -447,6 +469,7 @@
                         <outlet property="lblFollowers" destination="X8c-G8-iRf" id="ag0-GR-0VP"/>
                         <outlet property="lblFollowing" destination="URh-0r-aUN" id="Mav-11-8Xa"/>
                         <outlet property="lblName" destination="hdv-hi-RgK" id="Z6v-eh-7EW"/>
+                        <outlet property="offlineHeightConstraint" destination="rze-p5-irT" id="r4M-a1-hZS"/>
                         <outlet property="txtNote" destination="XkG-zC-y1L" id="R2G-UC-Dht"/>
                     </connections>
                 </viewController>
