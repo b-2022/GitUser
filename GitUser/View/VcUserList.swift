@@ -87,8 +87,8 @@ extension VcUserList: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        performSegue(withIdentifier: "segueToDetails", sender: viewModel.userList?[indexPath.row].login)
-        performSegue(withIdentifier: "segueToDetailsSwiftUI", sender: viewModel.userList?[indexPath.row].login)
+        performSegue(withIdentifier: "segueToDetails", sender: viewModel.userList?[indexPath.row].login)
+//        performSegue(withIdentifier: "segueToDetailsSwiftUI", sender: viewModel.userList?[indexPath.row].login)
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
